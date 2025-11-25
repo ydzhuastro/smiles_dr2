@@ -22,23 +22,23 @@ SMILES DR2 presents medium-resolution JWST/NIRSpec spectroscopy of 166 galaxies 
 
 The NIRSpec files follow the naming convention:
 
-hlsp_smiles_jwst_nirspec_goodss<NNNNNNNN>_<suffix>_v1.0_<type>.fits
+hlsp_smiles_jwst_nirspec[-nod<n>]_goodss<NNNNNNNN>_<suffix>_v1.0_<type>.fits
 
 where:
 
 <NNNNNNNN>     8-digit NIRCam source ID. Omitted for the catalog file.
 
 <suffix>       Describes the spectral configuration:
-               - For 2D spectra: <filter>_<grating>_nod<n>, where:
+               - For 2D spectra: <filter>_<grating>, where:
                    - <filter>  = f100lp or f170lp
                    - <grating> = g140m or g235m
-                   - <n>       = 2 or 3, indicating the nodding strategy used
+                   - The nodding strategy is indicated in the instrument key as "-nod2" or "-nod3"
                - For 1D spectra: 'multi', indicating that the 1D spectrum combines both gratings
                - For the catalog: also 'multi'
 
 <type>         Data product type:
-               - 'spec2d'   : Rectified 2D spectrum for one filter/grating/nod configuration
-               - 'spec1d'   : Stitched 1D spectrum (with slitloss correction) across G140M and G235M based on appropriote nodding configuration
+               - 'spec2d'   : Rectified 2D spectrum for one filter/grating configuration
+               - 'spec1d'   : Stitched 1D spectrum (with slitloss correction) across G140M and G235M based on the appropriate nodding configuration
                - 'catalog'  : Redshift, emission-line, and SED catalog for all sources
 
 ---------
@@ -98,7 +98,7 @@ No.	Name           	Type          	Description
 2   GELATO_LINES   	BinTableHDU   	Emission-line fits for star-forming and AGN sources
 3   PPXF_LINES     	BinTableHDU   	Absorption-line fits for quiescent sources
 4   SED_FITS       	BinTableHDU   	Stellar population properties from SED fitting
-5   AGN_SED_FITS   	BinTableHDU   	AGN-aware SED fitting results from NIRCam+MIRI photometry
+5   AGN_SED_FITS   	BinTableHDU   	Placeholder for AGN-specific SED fits (to be updated)
 
 EXT 1 contains the following:
 
@@ -106,19 +106,19 @@ EXT 1 contains the following:
 Description of columns:
 -----------------------
 
-'NIRCAM_ID'	        Unique source ID matched to NIRCam catalog  
-'MIRI_ID'	          Source ID in SMILES DR1 MIRI catalog; -1 if no match  
-'RA'		            Right Ascension (J2000; degrees)  
-'DEC'		            Declination (J2000; degrees)  
-'Z_PHOTO'	          Photometric redshift from ancillary data  
-'Z_SPEC'	          Best available spectroscopic redshift  
-'UNCERTAIN_Z_SPEC'	Flag (1 = redshift uncertain; 0 = reliable)  
-'AGN'			          Flag (1 = AGN; 0 = not AGN)  
-'EXTENDED'		      Flag (1 = spatially extended; 0 = compact)  
-'KEYWORDS'		      Science label and selection tags (e.g., FRESCO-overdensity, asagao_specz_miri)
+'NIRCAM_ID'	  Unique source ID matched to NIRCam catalog  
+'MIRI_ID'	    Source ID in SMILES DR1 MIRI catalog; -1 if no match  
+'RA'		      Right Ascension (J2000; degrees)  
+'DEC'		      Declination (J2000; degrees)  
+'Z_PHOTO'	    Photometric redshift from ancillary data  
+'Z_SPEC'	    Best available spectroscopic redshift  
+'Q'	          Redshift quality flag (A, B, C, or D; A = secure, B = moderate confidence, C = low confidence, D = no reliable redshift)
+'AGN'			    Flag (1 = AGN; 0 = not AGN)  
+'EXTENDED'		Flag (1 = spatially extended; 0 = compact)  
+'KEYWORDS'		Science label and selection tags (e.g., FRESCO-overdensity, asagao_specz_miri)
 
 
-EXT 2 provides Gaussian emission-line fitting results from the GELATO code (Zhu et al. 2025, in prep) for 152 galaxies. Fluxes, rest-frame equivalent widths (REWs), and line-based redshifts are reported for each detected transition, along with 1σ uncertainties. Lines are grouped by physical origin: AGN narrow lines, Balmer and Paschen series, [O III] outflows, and star formation tracers.
+EXT 2 contains provides Gaussian emission-line fitting results from the GELATO code (Zhu et al. 2025, in prep) for 152 galaxies. Fluxes, rest-frame equivalent widths (REWs), and line-based redshifts are reported for each detected transition, along with 1σ uncertainties. Lines are grouped by physical origin: AGN narrow lines, Balmer and Paschen series, [O III] outflows, and star formation tracers.
 
 -----------------------
 Description of columns:
@@ -240,47 +240,8 @@ Description of columns:
 
 Note: AGN-related properties (log_fagn, log_agn_tau) may be unreliable for some sources. See EXT 5 for specialized AGN SED fits.
 
-EXT 5 contains AGN-aware SED fitting results of 113 sources with NIRCam+MIRI photometry following Lyu et al. (2024)
+EXT 5 contains ... [TODO]
 
------------------------
-Description of columns:
------------------------
-
-'NIRCAM_ID'       Unique source ID matched to NIRCam catalog  
-'MIRI_ID'         Source ID in SMILES DR1 MIRI catalog
-'mass_star'       Current stellar mass [log(M*/Msun)]  
-'mass_star_e'     16th percentile of stellar mass  
-'mass_star_E'     84th percentile of stellar mass  
-'lum_agn'         AGN bolometric luminosity [log(Lbol/Lsun)]  
-'lum_agn_e'       16th percentile of AGN luminosity  
-'lum_agn_E'       84th percentile of AGN luminosity  
-'tau_agn_opt'     V-band extinction for AGN using SMC-like dust attenuation  
-'tau_agn_opt_e'   16th percentile of tau_agn_opt  
-'tau_agn_opt_E'   84th percentile of tau_agn_opt  
-'tau_agn_ir'      V-band extinction for AGN using empirical IR attenuation  
-'tau_agn_ir_e'    16th percentile of tau_agn_ir  
-'tau_agn_ir_E'    84th percentile of tau_agn_ir  
-'lum_sfir'        IR luminosity from stellar heating [log(LIR/Lsun)]  
-'lum_sfir_e'      16th percentile of IR luminosity  
-'lum_sfir_E'      84th percentile of IR luminosity  
-'sfr_sfir'        Star formation rate inferred from L_IR (Kennicutt+98 law) [Msun/yr]  
-'sfr_sfir_e'      16th percentile of SFR_IR  
-'sfr_sfir_E'      84th percentile of SFR_IR  
-'dust_index'      Power-law index of the dust attenuation curve  
-'dust_index_e'    16th percentile of dust_index  
-'dust_index_E'    84th percentile of dust_index  
-'dust2'           V-band optical depth for diffuse dust 
-'dust2_e'         16th percentile of dust2  
-'dust2_E'         84th percentile of dust2  
-'tage'            Stellar population age [Gyr]  
-'tage_e'          16th percentile of tage  
-'tage_E'          84th percentile of tage  
-'tau'             Star formation e-folding timescale [Gyr]  
-'tau_e'           16th percentile of tau  
-'tau_E'           84th percentile of tau  
-'sfr_sed'         Instantaneous SFR from stellar population synthesis (averaged over 0.01 Gyr) [Msun/yr]  
-'sfr_sed_e'       16th percentile of SFR_SED  
-'sfr_sed_E'       84th percentile of SFR_SED  
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
