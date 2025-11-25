@@ -2,6 +2,10 @@ README file for the Systematic Mid-Infrared Instrument Legacy Extragalactic Surv
 MAST webpage: https://archive.stsci.edu/hlsp/smiles/
 Refer to this HLSP with DOI: http://dx.doi.org/10.17909/et3f-zd57
 
+Github Data Repositories: 
+Imaging Release (DR1): https://github.com/staceyalberts/JWST-SMILES/releases/tag/v1.0
+Spectroscopy Release (DR2): https://github.com/ydzhuastro/smiles_dr2
+
 ## Contributor
 Stacey Alberts, salberts@arizona.edu, Steward Observatory, University of Arizona
 Yongda Zhu, yongdaz@arizona.edu, Steward Observatory, University of Arizona
